@@ -3,6 +3,7 @@ import CourseList from "./components/CourseList"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useJsonQuery } from "./utilities/fetch"
 import "./App.css"
+import TermPage from "./components/TermPage"
 
 const Main = () => {
   const coursesURL =
@@ -16,7 +17,7 @@ const Main = () => {
   return (
     <>
       <Banner title={schedule.title} />
-      <CourseList courses={schedule.courses} />
+      <TermPage courses={schedule.courses} />
     </>
   )
 }

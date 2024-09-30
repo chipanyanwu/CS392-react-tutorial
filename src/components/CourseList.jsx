@@ -16,12 +16,14 @@ function CourseCard({ course }) {
   )
 }
 
-function CourseList({ courses }) {
+function CourseList({ courses, termFilter }) {
   return (
     <div className="course-list">
-      {Object.entries(courses).map(([key, courseInfo]) => (
-        <CourseCard key={key} course={courseInfo} />
-      ))}
+      {Object.entries(courses)
+        .filter(([key, courseInfo]) => courseInfo.term == termFilter)
+        .map(([key, courseInfo]) => (
+          <CourseCard key={key} course={courseInfo} />
+        ))}
     </div>
   )
 }
