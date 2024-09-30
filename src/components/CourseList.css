@@ -14,6 +14,10 @@
   padding: 1rem;
 }
 
+.selected {
+  border: 3px solid #4e2a84;
+}
+
 .course-card-footer {
   border-top: 1px solid #64748b50;
 }

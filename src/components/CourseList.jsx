@@ -1,8 +1,11 @@
 import "./CourseList.css"
 
-function CourseCard({ course }) {
+function CourseCard({ id, course, selected, toggleSelected }) {
   return (
-    <div className="course-card">
+    <div
+      className={`course-card ${selected.includes(id) ? "selected" : ""}`}
+      onClick={() => toggleSelected(id)}
+    >
       <div className="course-card-header">
         <h2>
           {course.term} CS {course.number}
@@ -16,13 +19,19 @@ function CourseCard({ course }) {
   )
 }
 
-function CourseList({ courses, termFilter }) {
+function CourseList({ courses, termFilter, selected, toggleSelected }) {
   return (
     <div className="course-list">
       {Object.entries(courses)
         .filter(([key, courseInfo]) => courseInfo.term == termFilter)
         .map(([key, courseInfo]) => (
-          <CourseCard key={key} course={courseInfo} />
+          <CourseCard
+            key={key}
+            id={key}
+            course={courseInfo}
+            selected={selected}
+            toggleSelected={toggleSelected}
+          />
         ))}
     </div>
   )
