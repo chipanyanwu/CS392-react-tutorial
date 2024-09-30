@@ -1,0 +1,19 @@
+.course-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #e2e8f0;
+  border-radius: 1rem;
+  border: 1px solid #64748b;
+  padding: 1rem;
+}
+
+.course-card-footer {
+  border-top: 1px solid #64748b50;
+}
