@@ -1,5 +1,6 @@
 import { useState } from "react"
 import CourseList from "./CourseList"
+import Modal from "./Modal"
 import "./TermPage.css"
 
 const terms = ["Fall", "Winter", "Spring"]
@@ -15,7 +16,7 @@ const TermButton = ({ term, selection, setSelection }) => {
         autoComplete="off"
         onChange={() => setSelection(term)}
       />
-      <label className="btn btn-success mb-1 p-2" htmlFor={term}>
+      <label className="btn btn-success p-2" htmlFor={term}>
         {term}
       </label>
     </div>
@@ -40,19 +41,45 @@ const TermSelector = ({ selection, setSelection }) => {
 function TermPage({ courses }) {
   const [termSelection, setTermSelection] = useState(terms[0])
   const [selected, setSelected] = useState([])
+  const [modalOpen, setModalOpen] = useState(false)
 
-  const toggleSelected = (item) =>
+  const toggleSelected = (item) => {
     setSelected(
       selected.includes(item)
         ? selected.filter((x) => x !== item)
         : [...selected, item]
     )
+  }
 
-  console.log(selected)
+  console.log(selected, courses)
 
   return (
     <>
-      <TermSelector selection={termSelection} setSelection={setTermSelection} />
+      <div className="term-page-header">
+        <TermSelector
+          selection={termSelection}
+          setSelection={setTermSelection}
+        />
+        <button
+          className="btn btn-outline-primary"
+          onClick={() => setModalOpen(true)}
+        >
+          Course Plan
+        </button>
+      </div>
+      <Modal
+        open={modalOpen}
+        close={() => setModalOpen(false)}
+        headerTitle={"Course Plan"}
+      >
+        {Object.entries(courses)
+          .filter(([key, course]) => selected.includes(key))
+          .map(([key, course]) => (
+            <p>
+              {course.term} CS {course.number}: {course.title} ({course.meets})
+            </p>
+          ))}
+      </Modal>
       <CourseList
         courses={courses}
         termFilter={termSelection}
