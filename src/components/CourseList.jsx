@@ -1,10 +1,16 @@
 import "./CourseList.css"
 
-function CourseCard({ id, course, selected, toggleSelected }) {
+function CourseCard({ id, course, selected, toggleSelected, selectable }) {
   return (
     <div
-      className={`course-card ${selected.includes(id) ? "selected" : ""}`}
-      onClick={() => toggleSelected(id)}
+      className={`course-card ${selected.includes(id) ? "selected" : ""} ${
+        selectable ? "selectable" : "unselectable"
+      }`}
+      onClick={() => {
+        if (selectable) {
+          toggleSelected(id)
+        }
+      }}
     >
       <div className="course-card-header">
         <h2>
@@ -19,7 +25,13 @@ function CourseCard({ id, course, selected, toggleSelected }) {
   )
 }
 
-function CourseList({ courses, termFilter, selected, toggleSelected }) {
+function CourseList({
+  courses,
+  termFilter,
+  selected,
+  toggleSelected,
+  unselectable,
+}) {
   return (
     <div className="course-list">
       {Object.entries(courses)
@@ -31,6 +43,7 @@ function CourseList({ courses, termFilter, selected, toggleSelected }) {
             course={courseInfo}
             selected={selected}
             toggleSelected={toggleSelected}
+            selectable={!(key in unselectable)}
           />
         ))}
     </div>

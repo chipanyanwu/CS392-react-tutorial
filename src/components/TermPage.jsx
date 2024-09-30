@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { getConflictingCourses } from "../utilities/timeConflicts"
 import CourseList from "./CourseList"
 import Modal from "./Modal"
 import "./TermPage.css"
@@ -16,7 +17,7 @@ const TermButton = ({ term, selection, setSelection }) => {
         autoComplete="off"
         onChange={() => setSelection(term)}
       />
-      <label className="btn btn-success p-2" htmlFor={term}>
+      <label className="btn btn-outline-dark p-2" htmlFor={term}>
         {term}
       </label>
     </div>
@@ -41,6 +42,7 @@ const TermSelector = ({ selection, setSelection }) => {
 function TermPage({ courses }) {
   const [termSelection, setTermSelection] = useState(terms[0])
   const [selected, setSelected] = useState([])
+  const [conflicting, setConflicting] = useState({})
   const [modalOpen, setModalOpen] = useState(false)
 
   const toggleSelected = (item) => {
@@ -51,7 +53,11 @@ function TermPage({ courses }) {
     )
   }
 
-  console.log(selected, courses)
+  useEffect(() => {
+    setConflicting(getConflictingCourses(selected, courses))
+  }, [selected])
+
+  useEffect(() => console.log(conflicting), [conflicting])
 
   return (
     <>
@@ -60,10 +66,7 @@ function TermPage({ courses }) {
           selection={termSelection}
           setSelection={setTermSelection}
         />
-        <button
-          className="btn btn-outline-primary"
-          onClick={() => setModalOpen(true)}
-        >
+        <button className="btn btn-dark" onClick={() => setModalOpen(true)}>
           Course Plan
         </button>
       </div>
@@ -76,7 +79,7 @@ function TermPage({ courses }) {
           Object.entries(courses)
             .filter(([key, course]) => selected.includes(key))
             .map(([key, course]) => (
-              <p>
+              <p key={key}>
                 {course.term} CS {course.number}: {course.title} ({course.meets}
                 )
               </p>
@@ -93,6 +96,7 @@ function TermPage({ courses }) {
         termFilter={termSelection}
         selected={selected}
         toggleSelected={toggleSelected}
+        unselectable={conflicting}
       />
     </>
   )
