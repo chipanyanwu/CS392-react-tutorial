@@ -72,13 +72,21 @@ function TermPage({ courses }) {
         close={() => setModalOpen(false)}
         headerTitle={"Course Plan"}
       >
-        {Object.entries(courses)
-          .filter(([key, course]) => selected.includes(key))
-          .map(([key, course]) => (
-            <p>
-              {course.term} CS {course.number}: {course.title} ({course.meets})
-            </p>
-          ))}
+        {selected.length > 0 ? (
+          Object.entries(courses)
+            .filter(([key, course]) => selected.includes(key))
+            .map(([key, course]) => (
+              <p>
+                {course.term} CS {course.number}: {course.title} ({course.meets}
+                )
+              </p>
+            ))
+        ) : (
+          <p>
+            No classes currently selected. Please click on the classes that you
+            would like to add to your schedule.
+          </p>
+        )}
       </Modal>
       <CourseList
         courses={courses}
