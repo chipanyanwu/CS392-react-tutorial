@@ -3,6 +3,14 @@ import { useFormData } from "../utilities/useFormData"
 
 const validateCourseData = (key, val) => {
   switch (key) {
+    case "title":
+      return /^.{2,}$/.test(val) ? "" : "must be least two characters"
+    case "meets":
+      return /^(M|Tu|W|Th|F|Sa|Su)+( (?:[01]?\d|2[0-3]):[0-5]\d-(?:[01]?\d|2[0-3]):[0-5]\d)$/.test(
+        val
+      )
+        ? ""
+        : "must contain days and start-end, e.g., MWF 12:00-13:20"
     default:
       return ""
   }
