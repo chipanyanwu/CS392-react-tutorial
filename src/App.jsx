@@ -1,8 +1,10 @@
-import Banner from "./components/Banner"
-import TermPage from "./components/TermPage"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useJsonQuery } from "./utilities/fetch"
-// import "bootstrap/dist/css/bootstrap.min.css"
+import Banner from "./components/Banner"
+import TermPage from "./components/TermPage"
+import EditCoursePage from "./components/EditCoursePage"
+import "bootstrap-icons/font/bootstrap-icons.css"
 import "./App.css"
 
 const Main = () => {
@@ -15,10 +17,28 @@ const Main = () => {
   if (!schedule) return <h1>No user data found</h1>
 
   return (
-    <>
-      <Banner title={schedule.title} />
-      <TermPage courses={schedule.courses} />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Banner title={schedule.title} />
+              <TermPage courses={schedule.courses} />
+            </>
+          }
+        />
+        <Route
+          path="edit/:courseId"
+          element={
+            <>
+              <Banner title={schedule.title} />
+              <EditCoursePage courses={schedule.courses} />
+            </>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
