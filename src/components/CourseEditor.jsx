@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useFormData } from "../utilities/useFormData"
-import { useDbUpdate } from "../utilities/firebase"
+import { useAuthState, useDbUpdate } from "../utilities/firebase"
 
 const validateCourseData = (key, val) => {
   switch (key) {
@@ -17,7 +17,7 @@ const validateCourseData = (key, val) => {
   }
 }
 
-const InputField = ({ name, text, state, change }) => (
+const InputField = ({ name, text, state, change, disabled }) => (
   <div className="mb-3">
     <label htmlFor={name} className="form-label">
       {text}
@@ -28,6 +28,7 @@ const InputField = ({ name, text, state, change }) => (
       name={name}
       defaultValue={state.values?.[name]}
       onChange={change}
+      disabled={disabled ? "disabled" : ""}
     />
     <div className="invalid-feedback">{state.errors?.[name]}</div>
   </div>
@@ -57,6 +58,8 @@ const ButtonBar = ({ message, disabled }) => {
 }
 
 const CourseEditor = ({ course }) => {
+  const [user] = useAuthState()
+
   const navigate = useNavigate()
   const [update, result] = useDbUpdate(
     `/courses/${course.term[0] + course.number}`
@@ -79,7 +82,7 @@ const CourseEditor = ({ course }) => {
     evt.preventDefault()
 
     let diff = getDifferences(course, state.values)
-    if (Object.keys(diff).length > 0) {
+    if (user != undefined && Object.keys(diff).length > 0) {
       update(state.values)
     }
 
@@ -92,14 +95,21 @@ const CourseEditor = ({ course }) => {
       noValidate
       className={state.errors ? "was-validated" : null}
     >
-      <InputField name="title" text="Title" state={state} change={change} />
+      <InputField
+        name="title"
+        text="Title"
+        state={state}
+        change={change}
+        disabled={user == undefined}
+      />
       <InputField
         name="meets"
         text="Meeting Times"
         state={state}
         change={change}
+        disabled={user == undefined}
       />
-      <ButtonBar />
+      <ButtonBar disabled={user == undefined} />
     </form>
   )
 }

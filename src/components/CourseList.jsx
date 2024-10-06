@@ -1,14 +1,22 @@
 import { Link } from "react-router-dom"
+import { useAuthState } from "../utilities/firebase"
 import "./CourseList.css"
 
-function CourseCard({ id, course, selected, toggleSelected, selectable }) {
+function CourseCard({
+  id,
+  course,
+  selected,
+  toggleSelected,
+  selectable,
+  editable,
+}) {
   return (
     <div
       className={`course-card ${selected.includes(id) ? "selected" : ""} ${
         selectable ? "selectable" : "unselectable"
       }`}
     >
-      <div className="course-card-btn-container">
+      <div className={`${editable ? "course-card-btn-container" : ""}`}>
         <Link to={`/edit/${id}`}>
           <button className="course-card-btn">
             <i className="bi bi-pencil-square"></i>
@@ -44,6 +52,8 @@ function CourseList({
   toggleSelected,
   unselectable,
 }) {
+  const [user] = useAuthState()
+
   return (
     <div className="course-list">
       {Object.entries(courses)
@@ -56,6 +66,7 @@ function CourseList({
             selected={selected}
             toggleSelected={toggleSelected}
             selectable={!(key in unselectable)}
+            editable={user != undefined}
           />
         ))}
     </div>
