@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { useDbData } from "./utilities/firebase"
+import { useDbData, useProfile } from "./utilities/firebase"
 import Banner from "./components/Banner"
 import TermPage from "./components/TermPage"
 import EditCoursePage from "./components/EditCoursePage"

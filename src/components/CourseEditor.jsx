@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useFormData } from "../utilities/useFormData"
-import { useAuthState, useDbUpdate } from "../utilities/firebase"
+import { useProfile, useDbUpdate } from "../utilities/firebase"
 
 const validateCourseData = (key, val) => {
   switch (key) {
@@ -58,7 +58,7 @@ const ButtonBar = ({ message, disabled }) => {
 }
 
 const CourseEditor = ({ course }) => {
-  const [user] = useAuthState()
+  const [{ user, isAdmin }, isLoading, error] = useProfile()
 
   const navigate = useNavigate()
   const [update, result] = useDbUpdate(
@@ -100,16 +100,16 @@ const CourseEditor = ({ course }) => {
         text="Title"
         state={state}
         change={change}
-        disabled={user == undefined}
+        disabled={!isAdmin}
       />
       <InputField
         name="meets"
         text="Meeting Times"
         state={state}
         change={change}
-        disabled={user == undefined}
+        disabled={!isAdmin}
       />
-      <ButtonBar disabled={user == undefined} />
+      <ButtonBar disabled={!isAdmin} />
     </form>
   )
 }

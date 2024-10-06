@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { useAuthState } from "../utilities/firebase"
+import { useProfile } from "../utilities/firebase"
 import "./CourseList.css"
 
 function CourseCard({
@@ -52,7 +52,7 @@ function CourseList({
   toggleSelected,
   unselectable,
 }) {
-  const [user] = useAuthState()
+  const [{ user, isAdmin }, isLoading, error] = useProfile()
 
   return (
     <div className="course-list">
@@ -66,7 +66,7 @@ function CourseList({
             selected={selected}
             toggleSelected={toggleSelected}
             selectable={!(key in unselectable)}
-            editable={user != undefined}
+            editable={isAdmin}
           />
         ))}
     </div>
