@@ -1,4 +1,4 @@
-import { signInWithGoogle, signOut, useAuthState } from "../utilities/firebase"
+import { signInWithGoogle, signOut, useProfile } from "../utilities/firebase"
 import { Link } from "react-router-dom"
 
 const SignInButton = () => (
@@ -13,20 +13,36 @@ const SignOutButton = () => (
   </button>
 )
 
-const AuthButton = () => {
-  const [user] = useAuthState()
+const AuthButton = ({ user }) => {
   return user ? <SignOutButton /> : <SignInButton />
 }
 
 function Banner({ title }) {
+  const [{ user, isAdmin }, isLoading, error] = useProfile()
+
   return (
     <div
-      style={{ marginBottom: "3rem", display: "flex", alignItems: "center" }}
+      style={{
+        marginBottom: "3rem",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
     >
       <Link to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
         <h1>{title}</h1>
       </Link>
-      <AuthButton />
+      <div style={{ display: "flex", alignItems: "center" }}>
+        {isAdmin ? (
+          <i
+            className="bi bi-person-fill-gear h2"
+            style={{ marginRight: "1rem", marginBottom: "0" }}
+          ></i>
+        ) : (
+          <></>
+        )}
+        <AuthButton user={user} />
+      </div>
     </div>
   )
 }
