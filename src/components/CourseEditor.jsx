@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useFormData } from "../utilities/useFormData"
+import { useDbUpdate } from "../utilities/firebase"
 
 const validateCourseData = (key, val) => {
   switch (key) {
@@ -56,11 +57,33 @@ const ButtonBar = ({ message, disabled }) => {
 }
 
 const CourseEditor = ({ course }) => {
-  // const [update, result] = useDbUpdate(`/users/${user.id}`)
+  const navigate = useNavigate()
+  const [update, result] = useDbUpdate(
+    `/courses/${course.term[0] + course.number}`
+  )
   const [state, change] = useFormData(validateCourseData, course)
+
+  const getDifferences = (referenceObj, obj) => {
+    let differences = {}
+
+    Object.keys(obj).forEach((key) => {
+      if (referenceObj[key] !== obj[key]) {
+        differences[key] = obj[key]
+      }
+    })
+
+    return differences
+  }
 
   const submit = (evt) => {
     evt.preventDefault()
+
+    let diff = getDifferences(course, state.values)
+    if (Object.keys(diff).length > 0) {
+      update(state.values)
+    }
+
+    navigate("/")
   }
 
   return (
@@ -76,7 +99,7 @@ const CourseEditor = ({ course }) => {
         state={state}
         change={change}
       />
-      <ButtonBar disabled={true} />
+      <ButtonBar />
     </form>
   )
 }
