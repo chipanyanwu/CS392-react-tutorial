@@ -16,7 +16,13 @@ function CourseCard({
         selectable ? "selectable" : "unselectable"
       }`}
     >
-      <div className={`${editable ? "course-card-btn-container" : ""}`}>
+      <div
+        className={`${
+          editable
+            ? "course-card-btn-container-show"
+            : "course-card-btn-container-hide"
+        }`}
+      >
         <Link to={`/edit/${id}`}>
           <button className="course-card-btn">
             <i className="bi bi-pencil-square"></i>
